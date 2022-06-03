@@ -1,8 +1,8 @@
 /*
 	Author: ghozt777
 	codeforces: https://codeforces.com/profile/ghozt777
-    Time: Sun May 29 02:45:11 IST 2022
-	Link to problem / contest : https://atcoder.jp/contests/dp/tasks/dp_i
+    Time: Fri Jun  3 19:57:37 IST 2022
+	Link to problem / contest : 
 */
 
 
@@ -43,45 +43,36 @@ vector<bool> vis ;
 void init(int v){adj.clear() ;vis.clear() ;adj.resize(v) ;vis.resize(v , false) ;}
 void dfs(int s){vis[s] = true ;for(auto x : adj[s]) if(!vis[x]) dfs(x) ;}
 
-vector<double> p ;
 
-vector<vector<double>> memo(3000 , vector<double>(3000 , -1)) ;
-
-double bf(int n , int k){ // memoized
-	if(n == 0) return k == 0 ? 1.00 : 0.00 ;
-	if(memo[n][k] != -1) return memo[n][k] ;
-	return memo[n][k] = p[n - 1] * bf(n - 1 , k - 1) + (1.00 - p[n - 1]) * bf(n - 1 , k);
+string decimalToBinary(ll n){
+    string s = bitset<64> (n).to_string();
+    return s ;
 }
-
-double bruteforce(){
-	const int n = p.size() ;
-	const int k = n / 2 + 1 ;
-	double res = 0.00 ;
-	for(int i = k ; i<= n ; i++) res += bf(n, i) ; 
-	return res ; 
-}
-
-double _dp(){
-	const int n = p.size() ;
-	vector<vector<double>> dp(n + 1 , vector<double>(n + 1 , 0.000)) ;
-	dp[0][0] = 1.000 ;
-	for(int i = 1 ; i <= n ; i++){
-		for(int j = 0 ; j <= i ; j++) dp[i][j] = p[i - 1] * dp[i - 1][j - 1] + (1 - p[i - 1]) * dp[i - 1][j] ;
-	}
-	const int k = p.size() / 2 + 1 ;
-	double res = 0.00 ;
-	for(int i = k ; i <= n ; i++) res += dp[n][i] ;
-	return res ;
-}
-
 
 void solve(){
 	// to execute for each test case
-	int n ;
+	ll n ;
 	cin >> n ;
-	p.resize(n) ;
-	read(p) ;
-	cout << _dp() << endl ;
+	string b = decimalToBinary(n) ;
+	reverse(b.begin() , b.end()) ;
+	b += "00000000" ;
+	int x = b.find('1') ;
+	int y = b.find('0') ;
+	int c1 = c(b , '1') ;
+	if(c1 == 1){
+		if(x > y){
+			ll res = pow(2 , x) + pow(2 , y) ;
+			cout << res << endl ;
+		}
+		else{
+			ll res = pow(2 , x) + pow(2 , x + 1) ; 
+			cout << res << endl ;
+		}
+	}
+	else{
+		ll res = pow(2 , x) ;
+		cout << res << endl ;
+	}
 }
 
 int main(){
@@ -89,11 +80,13 @@ int main(){
 	// please make sure to flush the o/p stream using endl or cout.flush()
 	ios_base::sync_with_stdio(false) ;
 	cin.tie(NULL) ;
-	cout << std::fixed;
+    cout << std::fixed;
     cout << std::setprecision(12);
-	int t = 1;
+	int t ;
+	cin >> t ;
 	while(t--) solve() ;
 
 	return EXIT_SUCCESS ;
 }
 
+ 
