@@ -1,8 +1,8 @@
 /*
 	Author: ghozt777
 	codeforces: https://codeforces.com/profile/ghozt777
-    Time: Fri Jun  3 19:57:37 IST 2022
-	Link to problem / contest : 
+    Time: Mon Jun  6 18:30:10 IST 2022
+	Link to problem / contest : https://www.facebook.com/codingcompetitions/hacker-cup/2021/qualification-round/problems/A2
 */
 
 
@@ -14,9 +14,9 @@ using vi = vector<int> ;
 using vvi = vector<vi> ;
 using pi = pair<int , int> ;
 
-#define PB emplace_back
+#define EB emplace_back
 #define PBK pop_back
-#define PBC push_back
+#define PB push_back
 #define MP make_pair
 #define f(n) for(int i=0;i<n;i++)
 #define fr(itr, n) for(int itr=0;itr<n;itr++)
@@ -35,44 +35,66 @@ void err(istream_iterator<string> it, T a, Args... args) {cerr << *it << " = " <
 template<typename... Args>void read(Args&... args){((cin >> args), ...);}
 template<typename T>void read(vector<T> &arr){for(auto & a : arr) cin >> a ;}
 template<typename T>void write(vector<T> &arr){for(auto & a : arr) cout << a << " " ;}
-const ll MOD = 10e9+7 ;
+const ll MOD = pow(10,9)+7 ;
 
 
-vvi adj ;
-vector<bool> vis ;
-void init(int v){adj.clear() ;vis.clear() ;adj.resize(v) ;vis.resize(v , false) ;}
-void dfs(int s){vis[s] = true ;for(auto x : adj[s]) if(!vis[x]) dfs(x) ;}
-
-
-string decimalToBinary(ll n){
-    string s = bitset<64>(n).to_string();
-    return s ;
+void addEdge(char a , char b , vector<vector<int>> & adj){
+	adj[a - 'A'].PB(b - 'A') ;
 }
 
-void solve(){
+int bfs(int s , int t , vector<vector<int>> & adj){
+	queue<int> q ;
+	vector<bool> vis(26 , false) ;
+	q.push(s) ;
+
+	int curr = 0 ;
+	while(!q.empty()){
+		int n = q.size() ;
+		while(n--){
+			int c = q.front() ;
+			if(c == t) return curr ;
+			q.pop() ;
+			for(int x : adj[c]){
+				if(!vis[x]){
+					vis[x] = true ;
+					q.push(x) ;
+				}
+			}
+		}
+		++curr ; 
+	}
+	return INT_MAX ;	
+}
+
+void solve(int tc){
 	// to execute for each test case
-	ll n ;
-	cin >> n ;
-	string b = decimalToBinary(n) ;
-	reverse(b.begin() , b.end()) ;
-	b += "00000000" ;
-	int x = b.find('1') ;
-	int y = b.find('0') ;
-	int c1 = c(b , '1') ;
-	if(c1 == 1){
-		if(x > y){
-			ll res = pow(2 , x) + pow(2 , y) ;
-			cout << res << endl ;
-		}
-		else{
-			ll res = pow(2 , x) + pow(2 , x + 1) ; 
-			cout << res << endl ;
-		}
+	vector<vector<int>> adj(26) ;
+	cout << "Case #" << tc << ": " ;
+	string s ;
+	cin >> s ;
+	int k  ;
+	cin >> k ;
+	for(int i = 0 ; i < k ; i++){	
+		string a ;
+		cin >> a ; 
+		addEdge(a[0] , a[1] , adj) ;
 	}
-	else{
-		ll res = pow(2 , x) ;
-		cout << res << endl ;
+	int res = INT_MAX ;
+	for(char ch = 'A' ;  ch <= 'Z' ; ch++){
+		int curr = 0 ;
+		for(char x : s){
+			if(x != ch){
+				int cost = bfs(x - 'A', ch - 'A' , adj) ;
+				if(cost == INT_MAX){
+					curr = INT_MAX ;
+					break ;
+				}
+				else curr += cost ;
+			}
+		}
+		res = min(res , curr) ;
 	}
+	res == INT_MAX ? cout << -1 << endl : cout << res << endl ;
 }
 
 int main(){
@@ -84,9 +106,8 @@ int main(){
     cout << std::setprecision(12);
 	int t ;
 	cin >> t ;
-	while(t--) solve() ;
+	for(int tc = 1 ; tc <= t ; tc++) solve(tc) ;
 
 	return EXIT_SUCCESS ;
 }
 
- 

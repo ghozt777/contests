@@ -1,7 +1,7 @@
 /*
 	Author: ghozt777
 	codeforces: https://codeforces.com/profile/ghozt777
-    Time: Fri Jun  3 20:58:15 IST 2022
+    Time: Mon Jun  6 18:00:46 IST 2022
 	Link to problem / contest : 
 */
 
@@ -14,9 +14,9 @@ using vi = vector<int> ;
 using vvi = vector<vi> ;
 using pi = pair<int , int> ;
 
-#define PB emplace_back
+#define EB emplace_back
 #define PBK pop_back
-#define PBC push_back
+#define PB push_back
 #define MP make_pair
 #define f(n) for(int i=0;i<n;i++)
 #define fr(itr, n) for(int itr=0;itr<n;itr++)
@@ -35,7 +35,7 @@ void err(istream_iterator<string> it, T a, Args... args) {cerr << *it << " = " <
 template<typename... Args>void read(Args&... args){((cin >> args), ...);}
 template<typename T>void read(vector<T> &arr){for(auto & a : arr) cin >> a ;}
 template<typename T>void write(vector<T> &arr){for(auto & a : arr) cout << a << " " ;}
-const ll MOD = 10e9+7 ;
+const ll MOD = pow(10,9)+7 ;
 
 
 vvi adj ;
@@ -43,34 +43,31 @@ vector<bool> vis ;
 void init(int v){adj.clear() ;vis.clear() ;adj.resize(v) ;vis.resize(v , false) ;}
 void dfs(int s){vis[s] = true ;for(auto x : adj[s]) if(!vis[x]) dfs(x) ;}
 
-ll _sum(int n){
-	return n * (n + 1) / 2 ;	
-}
 
 void solve(){
 	// to execute for each test case
-	int n , k ;
+	ll n , k ;
 	cin >> n >> k ;
-	vi arr(n) ;
+	vector<ll> arr(n) ;
 	read(arr) ;
-	if(k >= n){
+	if(n <= k){
 		ll sum = 0 ;
-		for(int x : arr) sum += x ;
-		sum += _sum(n) ;
+		for(auto x : arr) sum += x ;
+		sum += (n * k) - n*(n + 1) / 2 ;
 		cout << sum << endl ;
 	}
 	else{
-		ll sum = 0 ;
-		ll curr = 0 ;
-		for(int i = 0 ; i < k ; i++) curr += arr[i] ;
+		ll sum = 0 , currSum = 0 ;
+		for(int i = 0 ; i < k ; i++) currSum += arr[i] ;
+		sum = max(sum , currSum) ;
 		for(int i = k ; i < n ; i++){
-			sum = max(sum , curr) ;
-			curr -= arr[i - 1] ;
-			curr += arr[i] ;
+			currSum += arr[i] - arr[i - k] ;
+			sum = max(sum , currSum) ;
 		}
-		sum += k - 1 ;
+		sum += k * (k - 1) / 2 ;
 		cout << sum << endl ;
 	}
+
 }
 
 int main(){

@@ -1,8 +1,8 @@
 /*
 	Author: ghozt777
 	codeforces: https://codeforces.com/profile/ghozt777
-    Time: Fri Jun  3 19:57:37 IST 2022
-	Link to problem / contest : 
+    Time: Sun Jun  5 01:41:29 IST 2022
+	Link to problem / contest : https://www.facebook.com/codingcompetitions/hacker-cup/2021/qualification-round/problems/A1
 */
 
 
@@ -43,35 +43,32 @@ vector<bool> vis ;
 void init(int v){adj.clear() ;vis.clear() ;adj.resize(v) ;vis.resize(v , false) ;}
 void dfs(int s){vis[s] = true ;for(auto x : adj[s]) if(!vis[x]) dfs(x) ;}
 
-
-string decimalToBinary(ll n){
-    string s = bitset<64>(n).to_string();
-    return s ;
-}
-
-void solve(){
+void solve(int tc){
 	// to execute for each test case
-	ll n ;
-	cin >> n ;
-	string b = decimalToBinary(n) ;
-	reverse(b.begin() , b.end()) ;
-	b += "00000000" ;
-	int x = b.find('1') ;
-	int y = b.find('0') ;
-	int c1 = c(b , '1') ;
-	if(c1 == 1){
-		if(x > y){
-			ll res = pow(2 , x) + pow(2 , y) ;
-			cout << res << endl ;
-		}
-		else{
-			ll res = pow(2 , x) + pow(2 , x + 1) ; 
-			cout << res << endl ;
-		}
+	cout << "Case #" << tc << ": " ;
+	string s ;
+	cin >> s ;
+	unordered_map<char , int> c ;
+	unordered_map<char , int> v ;
+	int _c=0 , _v=0 ;
+	for(char x : s){
+		if(x == 'A' || x == 'E' || x == 'I' || x == 'O' || x == 'U') ++_v , ++v[x] ;
+		else _c++ , c[x] ++ ;
 	}
-	else{
-		ll res = pow(2 , x) ;
-		cout << res << endl ;
+	error(_v , _c , v.size() , c.size()) ;
+	if(v.size() + c.size() == 1) cout << 0 << endl ;	
+	else {
+		// convert everything to one conseonent
+		int _max_c = 0 ;
+		for(auto x : c) _max_c = max(_max_c , x.second) ;
+		int res1 = _v + 2 * (_c - _max_c) ;
+		
+		// convert everything to one vowel
+		int _max_v = 0 ;
+		for(auto x : v) _max_v = max(_max_v , x.second) ;
+		int res2 = _c + 2 * (_v - _max_v) ;
+		
+		cout << min(res1 ,res2) << endl ;
 	}
 }
 
@@ -84,9 +81,8 @@ int main(){
     cout << std::setprecision(12);
 	int t ;
 	cin >> t ;
-	while(t--) solve() ;
+	for(int i = 1 ; i <= t ; i++) solve(i) ;
 
 	return EXIT_SUCCESS ;
 }
 
- 
