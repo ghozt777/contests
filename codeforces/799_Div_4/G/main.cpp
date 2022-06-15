@@ -10,18 +10,18 @@
 using namespace std ;
 
 using ll = long long ;
-using vi = vector<int> ;
+using vi = vector<ll> ;
 using vvi = vector<vi> ;
-using pi = pair<int , int> ;
+using pi = pair<ll , ll> ;
 
-#define REP(i,s,e) for(int i=s;i<=e;i++)
+#define REP(i,s,e) for(ll i=s;i<=e;i++)
 #define EB emplace_back
 #define PBK pop_back
 #define PB push_back
 #define MP make_pair
-#define f(n) for(int i=0;i<n;i++)
-#define fr(itr, n) for(int itr=0;itr<n;itr++)
-#define F(s,e) for(int i=s;i<=e;i++)
+#define f(n) for(ll i=0;i<n;i++)
+#define fr(itr, n) for(ll itr=0;itr<n;itr++)
+#define F(s,e) for(ll i=s;i<=e;i++)
 #define c(arr,x) count(arr.begin() , arr.end() , x)
 #define _max(arr) * max_element(arr.begin() , arr.end())
 #define _min(arr) * min_element(arr.begin() , arr.end())
@@ -34,32 +34,34 @@ const ll MOD = pow(10,9)+7 ;
 // graphs
 vvi adj ;
 vector<bool> vis ;
-void init(int v){adj.clear() ;vis.clear() ;adj.resize(v) ;vis.resize(v , false) ;}
-void dfs(int s){vis[s] = true ;for(auto x : adj[s]) if(!vis[x]) dfs(x) ;}
+void init(ll v){adj.clear() ;vis.clear() ;adj.resize(v) ;vis.resize(v , false) ;}
+void dfs(ll s){vis[s] = true ;for(auto x : adj[s]) if(!vis[x]) dfs(x) ;}
 // count set bits in a given number
 template <typename T>
-int cnt_set_bits(T n){int res=0;while(n){n=n&(n-1);++res;}return res;}
+ll cnt_set_bits(T n){ll res=0;while(n){n=n&(n-1);++res;}return res;}
 
 //-----------------------------------------------------------------------------------------------
 
 void solve(){
 	// to execute for each test case
-	int n , k ;
+	ll n , k ;
 	cin >> n >> k ;
 	vector<ll> arr(n) ;
 	read(arr) ;
 	++k ;
-	int res = 0 ;
-	for(int i = 0 ; i <= n - k ; i++){
-		bool isOk = true ;
-		for(int j = i + 1 ; j < i + k ; j++){
-			if(2 * arr[j] > arr[j - 1]) continue ;
-			else {
-				isOk = false ;
-				break ;
-			}
+	ll  res = 0 ;
+	priority_queue<ll , vector<ll> , greater<ll>> breaks ;
+	breaks.push(n - 1) ;
+	for(ll i = 0 ; i < n - 1 ; i++){
+		if(arr[i] >= arr[i + 1] * 2) breaks.push(i) ;
+	}
+	for(ll i = 0 ; i < n ; i++){
+		if(breaks.top() > i){
+			if((breaks.top() - i + 1) >= k) ++res ;
 		}
-		res += isOk ;
+		else {
+			breaks.pop() ;
+		}
 	}
 	cout << res << endl ;
 }
@@ -71,7 +73,7 @@ int main(){
 	cin.tie(NULL) ;
     cout << std::fixed;
     cout << std::setprecision(12);
-	int t ;
+	ll t ;
 	cin >> t ;
 	while(t--) solve() ;
 
