@@ -45,7 +45,38 @@ int cnt_set_bits(T n){int res=0;while(n){n=n&(n-1);++res;}return res;}
 void solve(){
 	// to execute for each test case
 	int n = 0 ;
-	
+	cin>>n;
+	vector<vector<ll>> arr(n,vector<ll>(2));
+	map<ll,ll> m;
+	for(int i=0;i<n;i++)cin>>arr[i][0]>>arr[i][1];
+	for(auto x:arr){
+		++m[x[0]];
+		++m[x[1]];
+		if(m[x[0]]>2||m[x[1]]>2){
+			cout<<"NO\n" ;
+			return;
+		}
+	}
+	vector<ll> color(n,-1);
+	for(auto x:arr){
+		if(color[x[0]]==-1){
+			if(color[x[1]]!=-1)color[x[0]]=color[x[1]]==1?2:1;
+			else{
+				color[x[0]]=1;
+				color[x[1]]=2;
+			}
+		}
+		else if(color[x[1]]==-1){
+			color[x[1]]=color[x[0]]==1?2:1;	
+		}
+		else{
+			if(color[x[0]]==color[x[1]]){
+				cout<<"NO\n" ;
+				return;
+			}
+		}
+	}
+	cout<<"YES\n";
 }
 
 int main(){

@@ -47,7 +47,7 @@ const ll INF=INT_MIN;
 vector<vector<ll>> dp;
 
 ll bf(vector<ll>&arr,ll n, long double f, ll k,int c){
-	if(c>=32) return 0;
+	if(c>=32) return 0; // 32 as log2(1e9) ~= 30 -> after that its all gonna be 0s
 	if(n>=arr.size()) return 0;
 	if(dp[n][c]!=INF) return dp[n][c];
 	return dp[n][c]=max(bf(arr,n+1,f,k,c)-k+arr[n]*f,arr[n]*(f/(long double)2)+bf(arr,n+1,f/(long double)2,k,c+1));
